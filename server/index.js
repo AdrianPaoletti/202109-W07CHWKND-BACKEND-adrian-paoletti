@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const debug = require("debug")("socialMedia:server");
 const morgan = require("morgan");
+const auth = require("./middlewares/auth")
 const { notFoundErrorHandler, generalErrorHandler } = require("./error");
 
 const app = express();
