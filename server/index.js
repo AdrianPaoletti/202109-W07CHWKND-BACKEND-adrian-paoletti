@@ -3,8 +3,9 @@ const express = require("express");
 const cors = require("cors");
 const debug = require("debug")("socialMedia:server");
 const morgan = require("morgan");
+const userRoutes = require("./routes/userRoutes");
 const auth = require("./middlewares/auth")
-const { notFoundErrorHandler, generalErrorHandler } = require("./error");
+const { notFoundErrorHandler, generalErrorHandler } = require("./middlewares/error");
 
 const app = express();
 
@@ -26,6 +27,8 @@ const initializeServer = (port) =>
 
 app.use(morgan("dev"));
 app.use(express.json());
+
+app.use("/users", userRoutes);
 
 app.use(notFoundErrorHandler);
 app.use(generalErrorHandler);
