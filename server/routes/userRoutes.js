@@ -5,6 +5,6 @@ const { registerUser, loginUser } = require("../controller/usersController")
 const router = express.Router();
 
 router.use("/register", registerUser);
-router.user("/login", loginUser);
+router.use("/login", loginUser);
 
 module.exports = router;
