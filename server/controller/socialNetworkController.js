@@ -39,10 +39,6 @@ const getFriends = async (req, res, next) => {
   }
 }
 
-const getUser = async (req, res, next) => {
-
-}
-
 const addFriend = async (req, res, next) => {
   try {
     const friend = req.body;
@@ -69,13 +65,16 @@ const addFriend = async (req, res, next) => {
     error.message = "General pete on addfriend";
     next(error);
   }
-
-
-
 }
+
+const removeFriend = async (req, res, next) => { }
+
+
 
 module.exports = {
   getUsers,
   getFriends,
-  addFriend
+  addFriend,
+  removeFriend,
+
 }
