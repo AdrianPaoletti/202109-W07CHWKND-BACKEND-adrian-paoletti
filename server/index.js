@@ -30,7 +30,7 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 app.use("/users", userRoutes);
-app.use("/social", socialNetworkRoutes);
+app.use("/socialNetwork", auth, socialNetworkRoutes);
 
 app.use(notFoundErrorHandler);
 app.use(generalErrorHandler);

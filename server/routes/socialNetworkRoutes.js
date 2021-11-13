@@ -1,8 +1,11 @@
 const express = require("express");
-const { getUsers } = require("../controller/socialNetworkController")
+const { getUsers, getFriends, addFriend } = require("../controller/socialNetworkController")
 
 const router = express.Router();
 
-router.use("/", getUsers);
+router.get("/", getUsers);
+router.get("/friends", getFriends)
+router.post("/friends", addFriend)
+// router.delete("/friends/:idFriend", deleteFriend)
 
 module.exports = router;
