@@ -3,7 +3,6 @@ const debug = require("debug")("socialMedia:socialNetwrokController");
 const chalk = require("chalk");
 const User = require("../../database/models/user");
 
-
 const getUsers = async (req, res, next) => {
   try {
     const users = await User.find();
@@ -67,12 +66,11 @@ const addFriend = async (req, res, next) => {
     const friend = req.body;
     const friendToAdd = await User.findOne({ "username": friend.username });
     if (friendToAdd) {
-      const user = await User.findOne({ _id: req.userId });
-      console.log(user);
+      const user = await User.findById(req.userId);
       if (user) {
         user.friends = [...user.friends, friendToAdd._id];
-        await user.save(user);
         res.json(friendToAdd);
+        await user.save();
       }
       else {
         const error = new Error("Could not find user to add friend");
@@ -96,12 +94,11 @@ const removeFriend = async (req, res, next) => {
     const { id } = req.params;
     const friendToRemove = await User.findOne({ _id: id });
     if (friendToRemove) {
-      const user = await User.findOne({ _id: req.userId });
-
+      const user = await User.findById(req.userId);
       if (user) {
         user.friends = user.friends.filter((friend) => friend._id.toString() !== friendToRemove._id.toString())
-        await user.save(user);
         res.json(user.friends);
+        await user.save();
       }
       else {
         const error = new Error("Could not find user to remove friend");
@@ -125,11 +122,11 @@ const addEnemy = async (req, res, next) => {
     const enemy = req.body;
     const enemyToAdd = await User.findOne({ "username": enemy.username });
     if (enemyToAdd) {
-      const user = await User.findOne({ _id: req.userId });
+      const user = await User.findById(req.userId);
       if (user) {
         user.enemies = [...user.enemies, enemyToAdd._id];
-        await user.save(user);
         res.json(enemyToAdd);
+        await user.save();
       }
       else {
         const error = new Error("Could not find user to add enemie");
@@ -153,12 +150,12 @@ const removeEnemy = async (req, res, next) => {
     const { id } = req.params;
     const enemyToRemove = await User.findOne({ _id: id });
     if (enemyToRemove) {
-      const user = await User.findOne({ _id: req.userId });
+      const user = await User.findById(req.userId);
 
       if (user) {
         user.enemies = user.enemies.filter((friend) => friend._id.toString() !== enemyToRemove._id.toString())
-        await user.save(user);
         res.json(user.enemies);
+        await user.save();
       }
       else {
         const error = new Error("Could not find user to remove enemy");
