@@ -39,12 +39,39 @@ const getFriends = async (req, res, next) => {
   }
 }
 
+const getUser = async (req, res, next) => {
+
+}
+
 const addFriend = async (req, res, next) => {
-  const friend = req.body;
-  const newFriend = await User.create(friend);
-  const user = await User.findOne({ _id: req.userId });
-  user.friends = [...user.friends, newFriend._id];
-  await user.save(user);
+  try {
+    const friend = req.body;
+    const friendToAdd = await User.findOne({ "username": friend.username });
+    if (friendToAdd) {
+      const user = await User.findOne({ _id: req.userId });
+      if (user) {
+        user.friends = [...user.friends, friendToAdd._id];
+        await user.save(user);
+        res.json(friendToAdd);
+      }
+      else {
+        const error = new Error("Could not find user to add friend");
+        error.code = 404;
+        next(error);
+      }
+    } else {
+      const error = new Error("Could not find friend");
+      error.code = 404;
+      next(error);
+    }
+  } catch (error) {
+    error.code = 400;
+    error.message = "General pete on addfriend";
+    next(error);
+  }
+
+
+
 }
 
 module.exports = {

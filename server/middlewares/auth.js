@@ -1,9 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 const Auth = (req, res, next) => {
-  console.log("dentroAuth");
   const authHeader = req.header("Authorization");
-  console.log(authHeader);
   if (!authHeader) {
     const error = new Error("Nono t no register");
     error.code = 401;
