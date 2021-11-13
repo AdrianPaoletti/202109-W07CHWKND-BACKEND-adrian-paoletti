@@ -1,5 +1,8 @@
 /* eslint-disable no-underscore-dangle */
+const debug = require("debug")("socialMedia:socialNetwrokController");
+const chalk = require("chalk");
 const User = require("../../database/models/user");
+
 
 const getUsers = async (req, res, next) => {
   try {
@@ -67,14 +70,38 @@ const addFriend = async (req, res, next) => {
   }
 }
 
-const removeFriend = async (req, res, next) => { }
+const removeFriend = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const friendToRemove = await User.findOne({ _id: id });
+    if (friendToRemove) {
+      const user = await User.findOne({ _id: req.userId });
 
-
+      if (user) {
+        user.friends = user.friends.filter((friend) => friend._id.toString() !== friendToRemove._id.toString())
+        await user.save(user);
+        res.json(user.friends);
+      }
+      else {
+        const error = new Error("Could not find user to remove friend");
+        error.code = 404;
+        next(error);
+      }
+    } else {
+      const error = new Error("Could not find friend");
+      error.code = 404;
+      next(error);
+    }
+  } catch (error) {
+    error.code = 400;
+    error.message = "General pete on removefriend";
+    next(error);
+  }
+}
 
 module.exports = {
   getUsers,
   getFriends,
   addFriend,
   removeFriend,
-
 }
