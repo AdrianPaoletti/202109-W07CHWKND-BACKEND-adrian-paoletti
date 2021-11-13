@@ -68,6 +68,7 @@ const addFriend = async (req, res, next) => {
     const friendToAdd = await User.findOne({ "username": friend.username });
     if (friendToAdd) {
       const user = await User.findOne({ _id: req.userId });
+      console.log(user);
       if (user) {
         user.friends = [...user.friends, friendToAdd._id];
         await user.save(user);
