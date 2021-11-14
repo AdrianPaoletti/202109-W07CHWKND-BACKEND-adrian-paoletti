@@ -59,6 +59,60 @@ describe("Given a userController controller", () => {
     })
   })
 
+  describe("When register function is invoke with findOne method and that one doesn't find username", () => {
+    test("Then it should reject a new error with a 400 code", async () => {
+      const error = new Error();
+      error.code = 400;
+      const req = {
+        body: {
+          name: "raul",
+          username: "raul",
+          password: "raul",
+          age: 100,
+        }
+      };
+      const res = {
+        json: jest.fn(),
+      };
+      const next = jest.fn()
+      User.findOne = jest.fn().mockRejectedValue({});
+      await registerUser(req, res, next);
+
+      expect(next).toHaveBeenCalled();
+      expect(next.mock.calls[0][0]).toHaveProperty("code", error.code);
+    })
+  })
+
+  describe("When register function is invoke and create methodgets rejected", () => {
+    test("Then it should invoke next funcion with a new error and 400 code", async () => {
+      const req = {
+        body: {
+          name: "raul",
+          username: "raul",
+          password: "raul",
+          age: 100,
+        }
+      }
+
+      const user = req.body;
+      const res = {
+        json: jest.fn(),
+      };
+      const next = jest.fn()
+      User.findOne = jest.fn().mockResolvedValue(null);
+      bcrypt.hash = jest.fn().mockResolvedValue("raul");
+      User.create = jest.fn().mockResolvedValue(null);
+      const expectedError = new Error("Not posibol to create User");
+      expectedError.code = 404;
+
+      await registerUser(req, res, next);
+
+      expect(next).toHaveBeenCalled();
+      expect(next.mock.calls[0][0]).toHaveProperty("message", expectedError.message);
+      expect(next.mock.calls[0][0]).toHaveProperty("code", expectedError.code);
+    })
+  })
+
   describe("When login function is invoke and it receives a wrong username", () => {
     test("Then it should invoke next function with an 401 error", async () => {
       User.findOne = jest.fn().mockResolvedValue(null);
@@ -144,6 +198,32 @@ describe("Given a userController controller", () => {
       await loginUser(req, res, null);
 
       expect(res.json).toHaveBeenCalledWith(expectedResponse);
+    })
+  })
+
+  describe("When findOne function gets rejected", () => {
+    test("Then it should invoke next function with an error code 400", async () => {
+      const req = {
+        body: {
+          name: "raul",
+          username: "raul",
+          password: "raul",
+          age: 100,
+        }
+      }
+      const res = {
+        json: jest.fn()
+      };
+      const next = jest.fn();
+      User.findOne = jest.fn().mockRejectedValue({});
+      const expectedError = new Error("General pete login");
+      expectedError.code = 400;
+
+      await loginUser(req, res, next);
+
+      expect(next).toHaveBeenCalled();
+      expect(next.mock.calls[0][0]).toHaveProperty("code", expectedError.code);
+
     })
   })
 })

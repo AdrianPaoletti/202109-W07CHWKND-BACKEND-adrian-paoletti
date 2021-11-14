@@ -8,7 +8,6 @@ const Auth = (req, res, next) => {
     next(error);
   } else {
     const token = authHeader.split(" ")[1];
-    console.log(token)
     if (!token) {
       const error = new Error("Token incorrect");
       error.code = 401;

@@ -49,6 +49,44 @@ describe("Given a getUsers function", () => {
       expect(res.json).toHaveBeenCalledWith(users);
     })
   })
+
+  describe("When there is anything to find", () => {
+    test("Then it should return an error with code 400", async () => {
+      const req = jest.fn();
+      const res = {
+        json: jest.fn()
+      };
+      const next = jest.fn();
+      User.find = jest.fn().mockRejectedValue({});
+      const expectedError = new Error("General pete getUsers");
+      expectedError.code = 400;
+
+      await getUsers(req, res, next);
+
+      expect(next).toHaveBeenCalled();
+      expect(next.mock.calls[0][0]).toHaveProperty("message", expectedError.message);
+      expect(next.mock.calls[0][0]).toHaveProperty("code", expectedError.code);
+    })
+  })
+
+  describe("When it gets an not existent user", () => {
+    test("Then it should return an error with code 400", async () => {
+      const req = jest.fn();
+      const res = {
+        json: jest.fn()
+      };
+      const next = jest.fn();
+      User.find = jest.fn().mockResolvedValue(null);
+      const expectedError = new Error("Could not get users");
+      expectedError.code = 404;
+
+      await getUsers(req, res, next);
+
+      expect(next).toHaveBeenCalled();
+      expect(next.mock.calls[0][0]).toHaveProperty("message", expectedError.message);
+      expect(next.mock.calls[0][0]).toHaveProperty("code", expectedError.code);
+    })
+  })
 })
 
 describe("Given a getFriends function", () => {
