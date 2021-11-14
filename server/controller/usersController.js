@@ -48,7 +48,7 @@ const loginUser = async (req, res, next) => {
           id: user.id,
           username: user.username
         },
-          process.env.SECRET
+          "c2def87b98ae1b0b484e2eea5bd7ce61b4ddbb57bc1af9a06362e4fe05afad25"
         );
         res.json({ token });
       }
