@@ -6,7 +6,7 @@ const port = process.env.PORT ?? process.env.SERVER_PORT ?? 3000;
 
 (async () => {
   try {
-    await connectDB(process.env.MONGODB_LOCAL);
+    await connectDB(process.env.MONGODB_BASE);
     console.log(port);
     initializeServer(port);
   } catch (error) {

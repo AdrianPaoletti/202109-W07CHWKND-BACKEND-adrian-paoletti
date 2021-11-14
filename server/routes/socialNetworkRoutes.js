@@ -1,10 +1,11 @@
 const express = require("express");
 const auth = require("../middlewares/auth")
-const { getUsers, getFriends, addFriend, removeFriend, addEnemy, removeEnemy, getEnemies, updateUser } = require("../controller/socialNetworkController")
+const { getUsers, getFriends, addFriend, removeFriend, addEnemy, removeEnemy, getEnemies, updateUser, getUserById } = require("../controller/socialNetworkController")
 
 const router = express.Router();
 
 router.get("/", auth, getUsers);
+router.get("/:id", auth, getUserById);
 router.get("/friends", auth, getFriends)
 router.post("/friends/add", auth, addFriend)
 router.delete("/friends/:id", auth, removeFriend)

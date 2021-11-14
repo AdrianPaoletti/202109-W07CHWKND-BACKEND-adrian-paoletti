@@ -21,6 +21,26 @@ const getUsers = async (req, res, next) => {
   }
 }
 
+const getUserById = async (req, res, next) => {
+  const { id } = req.params;
+  console.log(req.params)
+  try {
+    const userFind = await User.findById(id);
+    if (userFind) {
+      res.json(userFind);
+    }
+    else {
+      const error = new Error("Could not get user by id");
+      error.code = 404;
+      next(error);
+    }
+  } catch (error) {
+    error.code = 400;
+    error.message = "General pete getUserById";
+    next(error);
+  }
+}
+
 const getFriends = async (req, res, next) => {
   try {
     const user = await User.findOne({ _id: req.userId })
@@ -201,4 +221,5 @@ module.exports = {
   removeEnemy,
   getEnemies,
   updateUser,
+  getUserById
 }
