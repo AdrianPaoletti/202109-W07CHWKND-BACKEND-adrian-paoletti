@@ -1,4 +1,4 @@
-const debug = require("debug")("robots:error");
+const debug = require("debug")("socialMedia:error");
 
 const notFoundErrorHandler = (req, res) => {
   res.status(404).json({ error: "Not Endpoint found" });
