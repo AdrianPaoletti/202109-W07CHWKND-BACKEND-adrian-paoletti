@@ -5,13 +5,13 @@ const debug = require("debug")("socialMedia:server");
 const morgan = require("morgan");
 const userRoutes = require("./routes/userRoutes");
 const socialNetworkRoutes = require("./routes/socialNetworkRoutes");
-const auth = require("./middlewares/auth")
 const { notFoundErrorHandler, generalErrorHandler } = require("./middlewares/error");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(morgan("dev"));
 
 const initializeServer = (port) =>
   new Promise((resolve, reject) => {
@@ -26,11 +26,10 @@ const initializeServer = (port) =>
     });
   });
 
-app.use(morgan("dev"));
-app.use(express.json());
+
 
 app.use("/users", userRoutes);
-app.use("/socialNetwork", auth, socialNetworkRoutes);
+app.use("/socialNetwork", socialNetworkRoutes);
 
 app.use(notFoundErrorHandler);
 app.use(generalErrorHandler);
