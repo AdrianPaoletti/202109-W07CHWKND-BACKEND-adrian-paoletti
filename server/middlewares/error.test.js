@@ -15,3 +15,20 @@ describe("Given a notFoundErrorHandler", () => {
     })
   })
 })
+
+describe("Given a generalErrorHandler", () => {
+  describe("When it receives an error and res", () => {
+    test("Then it should invoke the method status and json", () => {
+      const expectedError = new Error("Methalistic error");
+      expectedError.code = 456;
+
+      const res = {
+        status: jest.fn().mockReturnValue({ json: jest.fn().mockResolvedValue(expectedError) })
+      }
+
+      generalErrorHandler(expectedError, null, res)
+
+      expect(res.status).toHaveBeenCalledWith(expectedError.code);
+    })
+  })
+})
