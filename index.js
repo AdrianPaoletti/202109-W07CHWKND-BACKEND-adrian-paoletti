@@ -6,7 +6,7 @@ const port = process.env.SERVER_PORT ?? 3000;
 
 (async () => {
   try {
-    await connectDB("mongodb+srv://toto:saavedra@cluster0.jbqgc.mongodb.net/Social_network");
+    await connectDB(process.env.MONGODB_LOCAL);
     console.log(port);
     initializeServer(port);
   } catch (error) {
