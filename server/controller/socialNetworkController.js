@@ -197,7 +197,7 @@ const removeEnemy = async (req, res, next) => {
 const updateUser = async (req, res, next) => {
   try {
     // eslint-disable-next-line dot-notation
-    const updatedUser = await User.findByIdAndUpdate(req.body['_id'], req.body, { new: true });
+    const updatedUser = await User.findByIdAndUpdate(req.body.id, req.body, { new: true });
     if (updatedUser) {
       res.json(updatedUser);
     }
